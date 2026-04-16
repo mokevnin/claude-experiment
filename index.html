@@ -1,26 +1,800 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: sans-serif;
-            background-color: #f0f4f8;
-        }
-        h1 {
-            font-size: 3rem;
-            color: #2d3748;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ФинансПро — контроль финансов</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #22c55e;
+      --green-dark: #16a34a;
+      --green-light: #dcfce7;
+      --dark: #0f172a;
+      --gray: #64748b;
+      --light: #f8fafc;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--dark);
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--green-dark);
+    }
+
+    .logo span { color: var(--dark); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      color: var(--gray);
+      font-weight: 500;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--dark); }
+
+    .nav-cta {
+      background: var(--green);
+      color: #fff;
+      padding: .5rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background .2s;
+    }
+
+    .nav-cta:hover { background: var(--green-dark); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #f0fdf4 0%, #fff 60%);
+      padding: 6rem 2rem 5rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: .35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      letter-spacing: .03em;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.75rem);
+      font-weight: 900;
+      line-height: 1.15;
+      max-width: 700px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green-dark);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+      padding: .85rem 2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(34,197,94,.35);
+    }
+
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--dark);
+      padding: .85rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1.5px solid var(--border);
+      transition: border-color .2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--gray); }
+
+    .hero-note {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    /* DASHBOARD MOCKUP */
+    .mockup-wrap {
+      max-width: 860px;
+      margin: 4rem auto 0;
+      padding: 0 2rem;
+    }
+
+    .mockup {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+
+    .mockup-bar {
+      background: var(--light);
+      border-bottom: 1px solid var(--border);
+      padding: .75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-r { background: #f87171; }
+    .dot-y { background: #fbbf24; }
+    .dot-g { background: var(--green); }
+
+    .mockup-body {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .m-card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+
+    .m-card-label { font-size: .75rem; color: var(--gray); font-weight: 500; }
+    .m-card-value { font-size: 1.5rem; font-weight: 800; margin-top: .2rem; }
+    .m-card-value.up { color: var(--green-dark); }
+    .m-card-value.down { color: #ef4444; }
+
+    .m-chart {
+      grid-column: 1 / -1;
+      background: var(--light);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      height: 80px;
+      display: flex;
+      align-items: flex-end;
+      gap: .4rem;
+    }
+
+    .bar {
+      flex: 1;
+      background: var(--green-light);
+      border-radius: 4px 4px 0 0;
+      transition: background .2s;
+    }
+
+    .bar:hover { background: var(--green); }
+    .bar.active { background: var(--green); }
+
+    /* SOCIAL PROOF */
+    .social-proof {
+      text-align: center;
+      padding: 2rem 2rem 4rem;
+      color: var(--gray);
+      font-size: .9rem;
+    }
+
+    .social-proof strong { color: var(--dark); }
+
+    .avatars {
+      display: flex;
+      justify-content: center;
+      margin-bottom: .75rem;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-left: -8px;
+      font-size: .8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .avatar:first-child { margin-left: 0; }
+
+    /* FEATURES */
+    .features {
+      background: var(--light);
+      padding: 5rem 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: .75rem;
+    }
+
+    .section-header p {
+      color: var(--gray);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      transition: box-shadow .2s, transform .2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,.07);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--green-light);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .feature-card p {
+      font-size: .9rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      padding: 5rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .3rem; }
+    .step p { color: var(--gray); font-size: .9rem; }
+
+    /* PRICING */
+    .pricing {
+      background: var(--light);
+      padding: 5rem 2rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .plan {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .plan.popular {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.1);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .25rem .85rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .plan-name {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .5rem;
+    }
+
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+
+    .plan-price sup { font-size: 1rem; vertical-align: super; }
+    .plan-period { font-size: .85rem; color: var(--gray); margin-bottom: 1.5rem; }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: .7rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .plan-features li {
+      font-size: .9rem;
+      display: flex;
+      gap: .6rem;
+      align-items: flex-start;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      color: var(--green-dark);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .plan-btn {
+      display: block;
+      text-align: center;
+      padding: .75rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: background .2s, transform .15s;
+    }
+
+    .plan-btn.outline {
+      border: 1.5px solid var(--border);
+      color: var(--dark);
+    }
+
+    .plan-btn.outline:hover { border-color: var(--gray); }
+
+    .plan-btn.filled {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(34,197,94,.3);
+    }
+
+    .plan-btn.filled:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    /* TESTIMONIALS */
+    .testimonials {
+      padding: 5rem 2rem;
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .testi-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .stars { color: #fbbf24; font-size: 1rem; margin-bottom: .75rem; }
+
+    .testi-text {
+      font-size: .95rem;
+      line-height: 1.65;
+      color: var(--dark);
+      margin-bottom: 1.25rem;
+    }
+
+    .testi-author {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .testi-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: .85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .testi-name { font-weight: 700; font-size: .9rem; }
+    .testi-role { font-size: .8rem; color: var(--gray); }
+
+    /* CTA */
+    .cta {
+      background: linear-gradient(135deg, var(--dark) 0%, #1e3a2f 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+      color: #fff;
+    }
+
+    .cta h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      color: #94a3b8;
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: #94a3b8;
+      padding: 2rem;
+      text-align: center;
+      font-size: .85rem;
+      border-top: 1px solid #1e293b;
+    }
+
+    footer strong { color: #fff; }
+  </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Финанс<span>Про</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Возможности</a></li>
+    <li><a href="#how">Как работает</a></li>
+    <li><a href="#pricing">Тарифы</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Начать бесплатно</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">🚀 Более 12 000 пользователей</div>
+  <h1>Возьмите финансы<br/>под <em>полный контроль</em></h1>
+  <p>Отслеживайте доходы и расходы, планируйте бюджет и достигайте финансовых целей — всё в одном месте.</p>
+  <div class="hero-buttons">
+    <a href="#pricing" class="btn-primary">Начать бесплатно →</a>
+    <a href="#how" class="btn-secondary">Посмотреть демо</a>
+  </div>
+  <p class="hero-note">Бесплатно 14 дней · Без карты · Отмена в любой момент</p>
+</section>
+
+<!-- MOCKUP -->
+<div class="mockup-wrap">
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+    <div class="mockup-body">
+      <div class="m-card">
+        <div class="m-card-label">Баланс</div>
+        <div class="m-card-value">₽ 148 200</div>
+      </div>
+      <div class="m-card">
+        <div class="m-card-label">Доход (апрель)</div>
+        <div class="m-card-value up">+₽ 92 000</div>
+      </div>
+      <div class="m-card">
+        <div class="m-card-label">Расходы (апрель)</div>
+        <div class="m-card-value down">−₽ 43 800</div>
+      </div>
+      <div class="m-chart">
+        <div class="bar" style="height:40%"></div>
+        <div class="bar" style="height:55%"></div>
+        <div class="bar" style="height:35%"></div>
+        <div class="bar" style="height:70%"></div>
+        <div class="bar" style="height:60%"></div>
+        <div class="bar" style="height:80%"></div>
+        <div class="bar active" style="height:95%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+<div class="social-proof">
+  <div class="avatars">
+    <div class="avatar" style="background:#6366f1">АН</div>
+    <div class="avatar" style="background:#ec4899">МК</div>
+    <div class="avatar" style="background:#f59e0b">ДВ</div>
+    <div class="avatar" style="background:#14b8a6">СП</div>
+    <div class="avatar" style="background:#8b5cf6">ЕЛ</div>
+  </div>
+  <div>Уже <strong>12 000+</strong> человек контролируют свои финансы с ФинансПро</div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-header">
+    <h2>Всё что нужно для финансового здоровья</h2>
+    <p>Мощные инструменты, простой интерфейс — без лишней сложности.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Умная аналитика</h3>
+      <p>Автоматически категоризируем расходы и показываем наглядные графики по месяцам и категориям.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Финансовые цели</h3>
+      <p>Откладывайте на отпуск, машину или квартиру. Следите за прогрессом в реальном времени.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏦</div>
+      <h3>Подключение банков</h3>
+      <p>Синхронизируйте счета из 50+ российских банков. Транзакции добавляются автоматически.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <h3>Умные уведомления</h3>
+      <p>Предупредим, когда бюджет на категорию заканчивается или пришло время платить по счетам.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>Планирование бюджета</h3>
+      <p>Устанавливайте лимиты по категориям на месяц и следите, чтобы расходы не выходили за рамки.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h3>Безопасность</h3>
+      <p>Шифрование банковского уровня. Ваши данные хранятся в России и никогда не передаются третьим лицам.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how">
+    <div class="section-header">
+      <h2>Начните за 3 минуты</h2>
+      <p>Никаких сложных настроек — просто зарегистрируйтесь и начните.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Создайте аккаунт</h3>
+          <p>Зарегистрируйтесь за 30 секунд — нужен только email. Первые 14 дней бесплатно.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Подключите банк или добавьте счёт вручную</h3>
+          <p>Синхронизируйте карты и счета или вносите транзакции самостоятельно — как вам удобнее.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Получайте инсайты и достигайте целей</h3>
+          <p>Смотрите аналитику, настраивайте бюджет и двигайтесь к своим финансовым целям.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <h2>Простые и честные тарифы</h2>
+    <p>Без скрытых платежей. Отмена подписки в любой момент.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <div class="plan-name">Базовый</div>
+      <div class="plan-price"><sup>₽</sup>0</div>
+      <div class="plan-period">навсегда бесплатно</div>
+      <ul class="plan-features">
+        <li>До 2 счетов</li>
+        <li>100 транзакций в месяц</li>
+        <li>Базовые категории</li>
+        <li>Месячная аналитика</li>
+      </ul>
+      <a href="#" class="plan-btn outline">Начать бесплатно</a>
+    </div>
+    <div class="plan popular">
+      <div class="popular-badge">Популярный</div>
+      <div class="plan-name">Про</div>
+      <div class="plan-price"><sup>₽</sup>399</div>
+      <div class="plan-period">в месяц · или ₽3 590 в год</div>
+      <ul class="plan-features">
+        <li>Неограниченные счета</li>
+        <li>Неограниченные транзакции</li>
+        <li>Подключение банков</li>
+        <li>Финансовые цели</li>
+        <li>Расширенная аналитика</li>
+        <li>Уведомления и лимиты</li>
+      </ul>
+      <a href="#" class="plan-btn filled">Начать 14 дней бесплатно</a>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Семейный</div>
+      <div class="plan-price"><sup>₽</sup>699</div>
+      <div class="plan-period">в месяц · до 5 пользователей</div>
+      <ul class="plan-features">
+        <li>Всё из тарифа Про</li>
+        <li>До 5 аккаунтов</li>
+        <li>Общий семейный бюджет</li>
+        <li>Общие цели</li>
+        <li>Приоритетная поддержка</li>
+      </ul>
+      <a href="#" class="plan-btn outline">Попробовать</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-header">
+    <h2>Что говорят пользователи</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">«За 3 месяца сократил расходы на 18% — просто увидел, куда уходят деньги. Раньше не задумывался об этом вообще.»</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#6366f1">АН</div>
+        <div>
+          <div class="testi-name">Алексей Новиков</div>
+          <div class="testi-role">Разработчик, Москва</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">«Наконец-то инструмент, которым пользуемся всей семьёй. Муж видит общий бюджет, я слежу за целями. Накопили на отпуск за 4 месяца!»</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#ec4899">МК</div>
+        <div>
+          <div class="testi-name">Мария Карпова</div>
+          <div class="testi-role">Дизайнер, Санкт-Петербург</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="stars">★★★★★</div>
+      <p class="testi-text">«Подключил все карты и перестал вручную вносить траты. Уведомления о превышении лимита — просто спасение. Рекомендую всем.»</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#14b8a6">ДВ</div>
+        <div>
+          <div class="testi-name">Дмитрий Волков</div>
+          <div class="testi-role">Предприниматель, Казань</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Начните контролировать деньги уже сегодня</h2>
+  <p>14 дней бесплатно. Карта не нужна. Отмена в любой момент.</p>
+  <a href="#pricing" class="btn-primary">Попробовать бесплатно →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>ФинансПро</strong> © 2025 · Политика конфиденциальности · Условия использования
+</footer>
+
 </body>
 </html>
