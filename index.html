@@ -546,6 +546,173 @@
     }
 
     footer strong { color: #fff; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(15,23,42,.6);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,.18);
+      animation: modal-in .2s ease;
+    }
+
+    @keyframes modal-in {
+      from { opacity: 0; transform: translateY(12px) scale(.97); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--light);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+
+    .modal-close:hover { background: var(--border); }
+
+    .modal h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: .4rem;
+    }
+
+    .modal > p {
+      font-size: .9rem;
+      color: var(--gray);
+      margin-bottom: 1.75rem;
+    }
+
+    .modal-plan-badge {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: .75rem;
+      font-weight: 700;
+      padding: .2rem .75rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: .85rem;
+      font-weight: 600;
+      margin-bottom: .4rem;
+      color: var(--dark);
+    }
+
+    .form-group label span {
+      font-weight: 400;
+      color: var(--gray);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: .7rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: .95rem;
+      font-family: inherit;
+      color: var(--dark);
+      transition: border-color .15s, box-shadow .15s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+    }
+
+    .form-group input::placeholder { color: #cbd5e1; }
+
+    .btn-submit {
+      width: 100%;
+      margin-top: .5rem;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      padding: .85rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(34,197,94,.35);
+      font-family: inherit;
+    }
+
+    .btn-submit:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+    .form-error {
+      font-size: .8rem;
+      color: #ef4444;
+      margin-top: .75rem;
+      text-align: center;
+      display: none;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin: 0 auto 1.25rem;
+      color: var(--green-dark);
+    }
+
+    .form-success h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: .5rem;
+    }
+
+    .form-success p {
+      color: var(--gray);
+      font-size: .9rem;
+    }
   </style>
 </head>
 <body>
@@ -558,7 +725,7 @@
     <li><a href="#how">Как работает</a></li>
     <li><a href="#pricing">Тарифы</a></li>
   </ul>
-  <a href="#pricing" class="nav-cta">Начать бесплатно</a>
+  <a href="#" class="nav-cta" onclick="openModal(); return false;">Начать бесплатно</a>
 </nav>
 
 <!-- HERO -->
@@ -567,7 +734,7 @@
   <h1>Возьмите финансы<br/>под <em>полный контроль</em></h1>
   <p>Отслеживайте доходы и расходы, планируйте бюджет и достигайте финансовых целей — всё в одном месте.</p>
   <div class="hero-buttons">
-    <a href="#pricing" class="btn-primary">Начать бесплатно →</a>
+    <a href="#" class="btn-primary" onclick="openModal(); return false;">Начать бесплатно →</a>
     <a href="#how" class="btn-secondary">Посмотреть демо</a>
   </div>
   <p class="hero-note">Бесплатно 14 дней · Без карты · Отмена в любой момент</p>
@@ -709,7 +876,7 @@
         <li>Базовые категории</li>
         <li>Месячная аналитика</li>
       </ul>
-      <a href="#" class="plan-btn outline">Начать бесплатно</a>
+      <a href="#" class="plan-btn outline" onclick="openModal('Базовый'); return false;">Начать бесплатно</a>
     </div>
     <div class="plan popular">
       <div class="popular-badge">Популярный</div>
@@ -724,7 +891,7 @@
         <li>Расширенная аналитика</li>
         <li>Уведомления и лимиты</li>
       </ul>
-      <a href="#" class="plan-btn filled">Начать 14 дней бесплатно</a>
+      <a href="#" class="plan-btn filled" onclick="openModal('Про'); return false;">Начать 14 дней бесплатно</a>
     </div>
     <div class="plan">
       <div class="plan-name">Семейный</div>
@@ -737,7 +904,7 @@
         <li>Общие цели</li>
         <li>Приоритетная поддержка</li>
       </ul>
-      <a href="#" class="plan-btn outline">Попробовать</a>
+      <a href="#" class="plan-btn outline" onclick="openModal('Семейный'); return false;">Попробовать</a>
     </div>
   </div>
 </section>
@@ -788,13 +955,119 @@
 <section class="cta">
   <h2>Начните контролировать деньги уже сегодня</h2>
   <p>14 дней бесплатно. Карта не нужна. Отмена в любой момент.</p>
-  <a href="#pricing" class="btn-primary">Попробовать бесплатно →</a>
+  <a href="#" class="btn-primary" onclick="openModal(); return false;">Попробовать бесплатно →</a>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <strong>ФинансПро</strong> © 2025 · Политика конфиденциальности · Условия использования
 </footer>
+
+<!-- LEAD CAPTURE MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Закрыть">×</button>
+    <h2>Оставить заявку</h2>
+    <p>Заполните форму — мы свяжемся с вами в течение 24 часов.</p>
+    <div class="modal-plan-badge" id="modal-plan-badge" style="display:none"></div>
+    <form id="lead-form" onsubmit="submitForm(event)" novalidate>
+      <input type="hidden" name="plan" id="form-plan">
+      <div class="form-group">
+        <label for="f-name">Имя</label>
+        <input type="text" id="f-name" name="name" placeholder="Алексей Иванов" required autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label for="f-email">Email</label>
+        <input type="email" id="f-email" name="email" placeholder="alex@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="f-phone">Телефон <span>(необязательно)</span></label>
+        <input type="tel" id="f-phone" name="phone" placeholder="+7 (900) 000-00-00" autocomplete="tel">
+      </div>
+      <button type="submit" class="btn-submit" id="submit-btn">Отправить заявку →</button>
+      <div class="form-error" id="form-error">Не удалось отправить заявку. Попробуйте ещё раз.</div>
+    </form>
+    <div class="form-success" id="form-success">
+      <div class="success-icon">✓</div>
+      <h3>Заявка отправлена!</h3>
+      <p>Мы свяжемся с вами в течение 24 часов. Спасибо за интерес к ФинансПро!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Replace with your Formspree form ID: https://formspree.io
+  const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+  function openModal(plan) {
+    const modal = document.getElementById('modal');
+    const badge = document.getElementById('modal-plan-badge');
+    const planInput = document.getElementById('form-plan');
+
+    if (plan) {
+      badge.textContent = 'Тариф: ' + plan;
+      badge.style.display = 'inline-block';
+      planInput.value = plan;
+    } else {
+      badge.style.display = 'none';
+      planInput.value = '';
+    }
+
+    document.getElementById('lead-form').style.display = 'block';
+    document.getElementById('form-success').style.display = 'none';
+    document.getElementById('form-error').style.display = 'none';
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = 'Отправить заявку →';
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('f-name').focus(), 50);
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  async function submitForm(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('submit-btn');
+    const errEl = document.getElementById('form-error');
+
+    btn.disabled = true;
+    btn.textContent = 'Отправляем…';
+    errEl.style.display = 'none';
+
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form),
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('modal-plan-badge').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      } else {
+        throw new Error('server error');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку →';
+      errEl.style.display = 'block';
+    }
+  }
+</script>
 
 </body>
 </html>
