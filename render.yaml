@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: finanspro-landing
+    runtime: static
+    buildCommand: echo done
+    staticPublishPath: .
+    branch: main
